@@ -6,34 +6,27 @@ namespace GPA
     {
         static void Main(string[] args)
         {
-            int questionCount = Convert.ToInt32(args[0]);
+            int questions = Convert.ToInt32(args[0]);
             double skillLevel = Convert.ToDouble(args[1]);
 
-            double[] GPAprobabilities = ExpectedGPA.CalculateExpectedGPAArray(questionCount, skillLevel);
-            double expectedGPA = ExpectedGPA.CalculateExpectedGPA(questionCount, skillLevel);
-
-            double[] GPAodds = new double[5];
-
-            for (int i = 0; i < 5; i++)
+            if (questions > 170)
             {
-                GPAodds[i] = 1 / GPAprobabilities[i];
+                throw new OverflowException("Number of questions cannot be greater than 170.");
+            }
+            else if (questions < 1)
+            {
+                throw new ArithmeticException("Number of questions cannot be less than 1.");
+            }
+            if (skillLevel > 1)
+            {
+                throw new ArithmeticException("Skill level cannot be greater than 1.");
+            }
+            else if (skillLevel < 0)
+            {
+                throw new ArithmeticException("Skill level cannot be less than 0.");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Questions: " + questionCount);
-            Console.WriteLine("Skill Level: " + skillLevel);
-            Console.WriteLine();
-
-            Console.WriteLine($"{"GPA", -5} {"Chance", -10} {"Odds", -10}\n");
-
-            for (int i = 0; i < GPAprobabilities.Length; i++)
-            {
-                Console.WriteLine($"{(double)i, -5} {Math.Round(GPAprobabilities[i], 5), -10} 1 in {Math.Round(GPAodds[i], 1), -10}");
-            }
-
-            Console.WriteLine();
-
-            Console.WriteLine("Expected GPA: " + Math.Round(expectedGPA, 2) + "\n");
+            ExpectedGrade.Print(questions, skillLevel);
         }
     }
 }
